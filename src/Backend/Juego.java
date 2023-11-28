@@ -1,7 +1,6 @@
 package Backend;
 
 import Backend.Cartas.*;
-import Backend.Jugadores.Jugador;
 import Backend.Jugadores.JugadorH;
 import Backend.Jugadores.JugadorIA;
 import java.util.Random;
@@ -22,7 +21,7 @@ public class Juego {
     private Baraja barajaJuego;
     private int turno;
     private int cantJugadas = 20;
-    private String paloGanador;
+    private Carta paloGanador;
     private Carta cartaJugador = null;
     private Carta cartaIA = null;
 
@@ -42,7 +41,7 @@ public class Juego {
         }
 
         //Verificar Carta Ganadora
-        paloGanador = getCartaGanadora(barajaJuego);
+        paloGanador = barajaJuego.getCartaArray(0);
 
         System.out.println("El palo ganador es: "+barajaJuego.getCartaArray(0).getIdfCarta());
 
@@ -67,7 +66,7 @@ public class Juego {
      * Getter de paloganador
      * @return paloganador : String
      */
-    public String getPaloGanador(){
+    public Carta getPaloGanador(){
         return paloGanador;
     }
 
@@ -159,7 +158,7 @@ public class Juego {
 
         //Comparacion de cartas
         //Si la carta es del Jugador y la de la IA son del palo ganador
-        if(cartaJugador.getTipo().equals(paloGanador) && cartaIA.getTipo().equals(paloGanador)){
+        if(cartaJugador.getTipo().equals(paloGanador.getTipo()) && cartaIA.getTipo().equals(paloGanador.getTipo())){
             puntuacionIA++; //1
             puntuacionJugador++; //1
             //Si el valor de ambas son iguales
@@ -176,13 +175,13 @@ public class Juego {
                 puntuacionIA++; // 2
             }
             //Si la del jugador es del palo ganador y la de la IA no lo es
-        } else if(cartaJugador.getTipo().equals(paloGanador) && !cartaIA.getTipo().equals(paloGanador)){
+        } else if(cartaJugador.getTipo().equals(paloGanador.getTipo()) && !cartaIA.getTipo().equals(paloGanador.getTipo())){
             puntuacionJugador++; // 1
             //Caso en que el del jugador no lo es y el de la IA si es
-        } else if(!(cartaJugador.getTipo().equals(paloGanador)) && cartaIA.getTipo().equals(paloGanador)){
+        } else if(!(cartaJugador.getTipo().equals(paloGanador.getTipo())) && cartaIA.getTipo().equals(paloGanador.getTipo())){
             puntuacionIA++;
             //Caso en que ambas no lo son
-        } else if(!cartaJugador.getTipo().equals(paloGanador) && !cartaIA.getTipo().equals(paloGanador)){
+        } else if(!cartaJugador.getTipo().equals(paloGanador.getTipo()) && !cartaIA.getTipo().equals(paloGanador.getTipo())){
             //Si son del mismo valor
             if(cartaJugador.getValor() == cartaIA.getValor()){
                 if(turno == 1){
@@ -216,12 +215,9 @@ public class Juego {
         //Metodo para sumar puntos
         jugador.sumarPuntuacion();
         jugadorIA.sumarPuntuacion();
-        //jugadorIA.posJugar(cartaJugador, paloGanador, cantJugadas);
 
         cartaIA = null;
         cartaJugador = null;
-        //System.out.println(endGame());
-        //checkTurnoPlay();
     }
 
     /**
@@ -271,14 +267,23 @@ public class Juego {
         return cantJugadas;
     }
 
-    public void intercambiarCartas(int pos, Jugador jugador){
+    public void intercambiarCartas(int pos){
         Carta aux = null;
 
         if(jugador.getCarta(pos).getIdfCarta() == 2 && jugador.isTurnoGanado()){
             System.out.println("La carta es 2");
+            System.out.println("Cambiando");
+            aux = paloGanador;
+            paloGanador = jugador.getCarta(pos);
+            jugador.setCartasPoseidas(pos, aux);
+            System.out.println("Ahora el palo ganador es :"+paloGanador.getTipo());
         } else if(jugador.getCarta(pos).getIdfCarta() == 7 && jugador.isTurnoGanado()){
             System.out.println("La carta es 7");
             System.out.println("Cambiando");
+            aux = paloGanador;
+            paloGanador = jugador.getCarta(pos);
+            jugador.setCartasPoseidas(pos, aux);
+            System.out.println("Ahora el palo ganador es :"+paloGanador.getTipo());
         } else {
             System.out.println("No es cambiable");
         }
@@ -292,22 +297,17 @@ public class Juego {
         return barajaJuego.getPosCartaASacar();
     }
 
-    /**
-     * Metodo para obtener el tipo del palo ganador
-     * @param b Carta que sera el palo ganador (Proximamente eliminada por ser defectuosa)
-     * @return Retorna una cadena que sera el tipo de carta : String
-     */
-    private static String getCartaGanadora(Baraja b){
-        String paloGanador = null;
-        if(b.getCartaArray(0) instanceof Basto)
-            paloGanador = ((Basto) b.getCartaArray(0)).getTipo();
-        else if (b.getCartaArray(0) instanceof Copa)
-            paloGanador = ((Copa) b.getCartaArray(0)).getTipo();
-        else if (b.getCartaArray(0) instanceof Espada)
-            paloGanador = ((Espada) b.getCartaArray(0)).getTipo();
-        else if (b.getCartaArray(0) instanceof Moneda)
-            paloGanador = ((Moneda) b.getCartaArray(0)).getTipo();
+    public String getGanador(){
+        String frase = "NobodyKnows";
 
-        return paloGanador;
+        if(jugador.getPuntuacion() == jugadorIA.getPuntuacion()){
+            frase = "Empate!";
+        } else if(jugador.getPuntuacion() < jugadorIA.getPuntuacion()){
+            frase = "El ganador es "+jugador.getNombre();
+        } else if(jugador.getPuntuacion() > jugadorIA.getPuntuacion()){
+            frase = "El ganador es la computadora!";
+        }
+
+        return frase;
     }
 }

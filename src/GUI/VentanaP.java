@@ -18,6 +18,11 @@ import java.awt.event.MouseListener;
  */
 public class VentanaP extends JFrame{
     //Atributos
+    private String nombreJugador;
+    private JMenuBar menuBar;
+    private JMenu menu;
+    private JMenuItem menuItem;
+    private JMenuItem menuItem2;
     private Juego juego;
     private JPanel p;
     private FondoCartaJugador panelCarta;
@@ -40,8 +45,9 @@ public class VentanaP extends JFrame{
      * @param w parametro para establecer el width de la ventana (largo)
      * @param h parametro para establecer el height de la ventana (ancho)
      */
-    public VentanaP(int w, int h){
-        setSize(w, h-50);
+    public VentanaP(int w, int h, String nombreJugador){
+        this.nombreJugador = nombreJugador;
+        setSize(w, h);
         setTitle("Briscas al reves");
         setVisible(true);
         setResizable(false);
@@ -52,21 +58,51 @@ public class VentanaP extends JFrame{
     }
 
     /**
+     * Constructor sobrecargado de Ventana Principal del juego Briscas al reves para en caso que exista ya un juego
+     * en curso
+     * @param w parametro para establecer el width de la ventana (largo)
+     * @param h parametro para establecer el height de la ventana (ancho)
+     * @param juego parametro para pasar el juego en curso
+     */
+    public VentanaP(int w, int h, Juego juego){
+        setSize(w, h);
+        setTitle("Briscas al reves");
+        setVisible(true);
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        initComponents(juego);
+    }
+
+    /**
      * Metodo de inicio de componentes de la ventana
      */
     public void initComponents(){
+        initMenu();
         initJuego();
         initPanel();
         initButton();
         initLabels();
+    }
+
+    /**
+     * Metodo por sobrecarga en caso que haya una partida existende
+     * @param juego se le pasa el juego ya iniciado por parametro
+     */
+    public void initComponents(Juego juego){
         initMenu();
+        this.juego = juego;
+        initPanel();
+        initButton();
+        initLabels();
     }
 
     /**
      * Inicio del juego (Proxima implementacion se le pasa por parametro un String)
      */
     public void initJuego(){
-        juego = new Juego("Pepe");
+        juego = new Juego(nombreJugador);
     }
 
     /**
@@ -80,7 +116,7 @@ public class VentanaP extends JFrame{
         ActionListener action = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                initComponents();
+                resetearJuego();
             }
         };
 
@@ -228,7 +264,13 @@ public class VentanaP extends JFrame{
                             juego.jugadaEjecutada();
                             System.out.println("CantJugadas: " + juego.getCantJugadas());
                             if (juego.getCantJugadas() == 0) {
-                                JOptionPane.showMessageDialog(null, "El juego ha acabado");
+                                JOptionPane.showMessageDialog(null, juego.getGanador());
+                                int opcion = JOptionPane.showConfirmDialog(null, "El juego ha acabado desea volver a jugar");
+                                if(opcion == JOptionPane.YES_OPTION){
+                                    resetearJuego();
+                                } else {
+                                    dispose();
+                                }
                             }
                             System.out.println("Depuracion");
                         }
@@ -238,7 +280,9 @@ public class VentanaP extends JFrame{
                 } else { // Construccion del Click Derecho
                     System.out.println("Click Derecho");
                     if(juego.getJugadorNormal().getCarta(panel.getPosMano()) != null){
-                        juego.intercambiarCartas(panel.getPosMano(), juego.getJugadorNormal());
+                        juego.intercambiarCartas(panel.getPosMano());
+                        panel.setCarta(juego.getJugadorNormal().getCarta(panel.getPosMano()));
+                        panelCartaGanadora.setCarta(juego.getPaloGanador());
                     }
                 }
 
@@ -278,7 +322,17 @@ public class VentanaP extends JFrame{
      * Futuro menu (Building)
      */
     private void initMenu(){
+        menuBar = new JMenuBar();
+        menu = new JMenu("Menu");
+        menuItem = new JMenuItem("Reiniciar Juego");
+        menuItem2 = new JMenuItem("Ayuda");
 
+        menu.add(menuItem);
+        menu.add(menuItem2);
+
+        menuBar.add(menu);
+
+        setJMenuBar(menuBar);
     }
 
     /**
@@ -304,5 +358,21 @@ public class VentanaP extends JFrame{
     private void jugarIA(){
         juego.jugarIA();
         panelReciv2.setCarta(juego.getCartaIAPuesta());
+    }
+
+    private void resetearJuego(){
+        initJuego();
+        panelCarta.setCarta(juego.getJugadorNormal().getCarta(0));
+        panelCarta1.setCarta(juego.getJugadorNormal().getCarta(1));
+        panelCarta2.setCarta(juego.getJugadorNormal().getCarta(2));
+        panelCartaGanadora.setCarta(juego.getPaloGanador());
+        panelReciv1.setFondoVerde();
+        panelReciv2.setFondoVerde();
+        for (int i = 0; i < 3; i++) {
+            cartaIA[i].setImagen("/Imagenes/Fondo.png");
+        }
+        puntuacionJugador.setText("Puntos: "+juego.getJugadorNormal().getPuntuacion());
+        puntuacionIA.setText("Puntos: "+juego.getJugadorIA().getPuntuacion());
+
     }
 }

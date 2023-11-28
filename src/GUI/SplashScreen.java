@@ -13,10 +13,17 @@ import javax.imageio.ImageIO;
 
 public class SplashScreen extends JWindow {
     private BufferedImage fondo;
+    private File file;
 
     public SplashScreen() {
+        if(Math.random() < 0.5){
+            file = new File("src/Imagenes/Splash.jpg");
+        } else {
+            file = new File("src/Imagenes/Splash2.jpg");
+        }
+
         try {
-            fondo = ImageIO.read(new File("src/Imagenes/Splash.jpg"));
+            fondo = ImageIO.read(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
