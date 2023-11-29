@@ -25,10 +25,11 @@ public abstract class Carta implements Serializable {
 
     /**
      * Metodo para obtener direccion de la imagen que posee la carta
+     *
      * @return Direccion fisica de la imagen : String
      */
-    public String getFrenteCarta() {
-        return frenteCarta.getDescription();
+    public ImageIcon getFrenteCarta() {
+        return frenteCarta;
     }
 
     /**

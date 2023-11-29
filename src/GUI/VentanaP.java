@@ -22,6 +22,7 @@ import java.io.ObjectOutputStream;
  */
 public class VentanaP extends JFrame{
     //Atributos
+    private ImageIcon imagenFondo = new ImageIcon(getClass().getResource("/Imagenes/Fondo.png"));
     private String nombreJugador;
     private JMenuBar menuBar;
     private JMenu menu;
@@ -98,6 +99,13 @@ public class VentanaP extends JFrame{
         this.juego = juego;
         initPanel();
         initLabels();
+        if(juego.getCartaJugador() != null) {
+            panelReciv1.setCarta(juego.getCartaJugador());
+        }
+
+        if(juego.getCartaIAPuesta() != null) {
+            panelReciv2.setCarta(juego.getCartaIAPuesta());
+        }
     }
 
     /**
@@ -158,22 +166,22 @@ public class VentanaP extends JFrame{
         panelCartaGanadora.setLocation(575, 253);
         p.add(panelCartaGanadora);
 
-        baraja = new Fondo("/Imagenes/Fondo.png", 155, 240);
+        baraja = new Fondo(imagenFondo, 155, 240);
         baraja.setLocation(575, 527);
         p.add(baraja);
 
         if(juego.getJugadorIA().getCarta(0) != null)
-            cartaIA[0] = new Fondo("/Imagenes/Fondo.png", 155, 240);
+            cartaIA[0] = new Fondo(imagenFondo, 155, 240);
         else
             cartaIA[0] = new Fondo((Carta) null, 155, 240);
 
         if(juego.getJugadorIA().getCarta(1) != null)
-            cartaIA[1] = new Fondo("/Imagenes/Fondo.png", 155, 240);
+            cartaIA[1] = new Fondo(imagenFondo, 155, 240);
         else
             cartaIA[1] = new Fondo((Carta) null, 155, 240);
 
         if(juego.getJugadorIA().getCarta(2) != null)
-            cartaIA[2] = new Fondo("/Imagenes/Fondo.png",155, 240);
+            cartaIA[2] = new Fondo(imagenFondo,155, 240);
         else
             cartaIA[2] = new Fondo((Carta) null, 155, 240);
 
@@ -238,7 +246,7 @@ public class VentanaP extends JFrame{
                                 if (juego.getJugadorIA().getCarta(i) == null)
                                     cartaIA[i].setCarta(juego.getJugadorIA().getCarta(i));
                                 else
-                                    cartaIA[i].setImagen("/Imagenes/Fondo.png");
+                                    cartaIA[i].setImagen(imagenFondo);
                                 // System.out.println("Iteracion: "+i);
                             }
                             //System.out.println("Error encontrado finish");
@@ -379,7 +387,7 @@ public class VentanaP extends JFrame{
         panelReciv1.setFondoVerde();
         panelReciv2.setFondoVerde();
         for (int i = 0; i < 3; i++) {
-            cartaIA[i].setImagen("/Imagenes/Fondo.png");
+            cartaIA[i].setImagen(imagenFondo);
         }
         puntuacionJugador.setText("Puntos: "+juego.getJugadorNormal().getPuntuacion());
         puntuacionIA.setText("Puntos: "+juego.getJugadorIA().getPuntuacion());

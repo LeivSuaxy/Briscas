@@ -14,7 +14,7 @@ import java.awt.*;
  */
 public class Fondo extends JPanel {
     private Carta cartaAlmacenada;
-    private String imagen;
+    private ImageIcon imagen;
     private boolean usarImagen;
 
     /**
@@ -42,7 +42,7 @@ public class Fondo extends JPanel {
      * @param a Ancho
      * @param l Largo
      */
-    public Fondo(String imagen, int a, int l){
+    public Fondo(ImageIcon imagen, int a, int l){
         this.imagen = imagen;
         this.setSize(a, l);
 
@@ -63,7 +63,7 @@ public class Fondo extends JPanel {
     public void paint(Graphics g){
         Dimension tamagno = getSize();
         if (usarImagen) {
-            ImageIcon imagenFondo = new ImageIcon(getClass().getResource(imagen));
+            ImageIcon imagenFondo = new ImageIcon((imagen).getImage());
             g.drawImage(imagenFondo.getImage(), 0, 0, tamagno.width, tamagno.height, null);
         } else {
             g.setColor(new Color(1, 86, 0));
@@ -77,7 +77,7 @@ public class Fondo extends JPanel {
      * Metodo para establecer una imagen a la carta
      * @param nuevaImagen Aqui se pone la direccion de una imagen que desee insertarle al panel
      */
-    public void setImagen(String nuevaImagen) {
+    public void setImagen(ImageIcon nuevaImagen) {
         this.imagen = nuevaImagen;
         this.usarImagen = true;
         repaint();
