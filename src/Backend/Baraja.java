@@ -3,6 +3,7 @@ package Backend;
 import Backend.Cartas.*;
 
 import javax.swing.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -14,7 +15,7 @@ import java.util.Random;
  * @Author LeivSuaxy
  * @Date 15/10/2023 14:19
  */
-public class Baraja {
+public class Baraja implements Serializable {
     private Carta[] baraja = new Carta[40];
     private ArrayList<Carta> barajaOpcional = new ArrayList<>();
     private int posCartaASacar;

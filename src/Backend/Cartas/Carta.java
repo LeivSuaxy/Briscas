@@ -1,13 +1,14 @@
 package Backend.Cartas;
 
 import javax.swing.*;
+import java.io.Serializable;
 
 /**
  * Clase super y abstracta de las Cartas, contenedora de todos los metodos y atributos esenciales de las clases Hijas
  * @Author LeivSuaxy
  * @Date 15/10/2023 12:18
  */
-public abstract class Carta {
+public abstract class Carta implements Serializable {
     //Atributos
     protected String tipo;
     protected int valor;

@@ -3,6 +3,8 @@ package Backend;
 import Backend.Cartas.*;
 import Backend.Jugadores.JugadorH;
 import Backend.Jugadores.JugadorIA;
+
+import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -13,7 +15,7 @@ import java.util.Random;
  * @Author LeivSuaxy
  * @Date 28/10/2023 21:17
  */
-public class Juego {
+public class Juego implements Serializable {
 
     //Atributos
     private JugadorH jugador;

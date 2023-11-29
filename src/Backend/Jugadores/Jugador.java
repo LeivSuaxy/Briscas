@@ -1,6 +1,8 @@
 package Backend.Jugadores;
 
 import Backend.Cartas.Carta;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -10,7 +12,7 @@ import java.util.Arrays;
  * @Author LeivSuaxy
  * @Date 30/10/2023 21:20
  */
-public abstract class Jugador {
+public abstract class Jugador implements Serializable {
     //Atributos
     protected String nombre;
     protected ArrayList<Carta> cartasPoseidas;

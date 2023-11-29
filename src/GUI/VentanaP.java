@@ -9,6 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 /**
  * Interfaz Grafica principal para el funcionamiento visual del juego Briscas al Reves, con todas sus objetos, metodos y
@@ -21,8 +25,9 @@ public class VentanaP extends JFrame{
     private String nombreJugador;
     private JMenuBar menuBar;
     private JMenu menu;
+    private JMenuItem guardado;
+    private JMenuItem ayuda;
     private JMenuItem menuItem;
-    private JMenuItem menuItem2;
     private Juego juego;
     private JPanel p;
     private FondoCartaJugador panelCarta;
@@ -35,7 +40,6 @@ public class VentanaP extends JFrame{
     private Fondo panelReciv2;
     private JLabel puntuacionIA;
     private JLabel puntuacionJugador;
-    private JButton botonReset;
 
     //Metodos
     //Constructor
@@ -82,7 +86,6 @@ public class VentanaP extends JFrame{
         initMenu();
         initJuego();
         initPanel();
-        initButton();
         initLabels();
     }
 
@@ -94,7 +97,6 @@ public class VentanaP extends JFrame{
         initMenu();
         this.juego = juego;
         initPanel();
-        initButton();
         initLabels();
     }
 
@@ -103,24 +105,6 @@ public class VentanaP extends JFrame{
      */
     public void initJuego(){
         juego = new Juego(nombreJugador);
-    }
-
-    /**
-     * Iniciando Botones
-     */
-    public void initButton(){
-        botonReset = new JButton("Reset");
-        botonReset.setBounds(50, 50, 50, 50);
-        p.add(botonReset);
-
-        ActionListener action = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                resetearJuego();
-            }
-        };
-
-        botonReset.addActionListener(action);
     }
 
     /**
@@ -324,11 +308,37 @@ public class VentanaP extends JFrame{
     private void initMenu(){
         menuBar = new JMenuBar();
         menu = new JMenu("Menu");
+        ayuda = new JMenuItem("Ayuda");
+        guardado = new JMenuItem("Guardar");
         menuItem = new JMenuItem("Reiniciar Juego");
-        menuItem2 = new JMenuItem("Ayuda");
+
+        ayuda.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VentanaAyuda ayudaInterface = new VentanaAyuda();
+            }
+        });
+
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int opcion = JOptionPane.showConfirmDialog(null, "Estas seguro de reiniciar?");
+                if(opcion == JOptionPane.YES_OPTION){
+                    resetearJuego();
+                }
+            }
+        });
+
+        guardado.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guardarPartida();
+            }
+        });
 
         menu.add(menuItem);
-        menu.add(menuItem2);
+        menu.add(guardado);
+        menu.add(ayuda);
 
         menuBar.add(menu);
 
@@ -373,6 +383,36 @@ public class VentanaP extends JFrame{
         }
         puntuacionJugador.setText("Puntos: "+juego.getJugadorNormal().getPuntuacion());
         puntuacionIA.setText("Puntos: "+juego.getJugadorIA().getPuntuacion());
+    }
 
+    private void guardarPartida(){
+        FileOutputStream fileStream;
+        ObjectOutputStream objStream;
+
+        try {
+            fileStream = new FileOutputStream("archivo.txt");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            objStream = new ObjectOutputStream(fileStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            objStream.writeObject(juego);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            objStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        JOptionPane.showMessageDialog(null, "Guardado!");
     }
 }
