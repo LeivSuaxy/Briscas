@@ -64,16 +64,15 @@ public abstract class Jugador implements Serializable {
     }
 
     /**
-     * Metodo para buscar si existe una carta de tipo 7 o 2 en
-     * @param cartaBuscar
-     * @return
+     * Metodo para buscar si existe cartas en mano
+     * @return valor que dice cuantas cartas hay en mano
      */
-    public int hayCartas(Carta cartaBuscar){
-        int pos = 4;
+    public int hayCartas(){
+        int pos = 3;
 
         for (int i = 0; i < 3; i++) {
-            if(cartasPoseidas.get(i).getIdfCarta() == cartaBuscar.getIdfCarta()){
-                pos = i;
+            if(cartasPoseidas.get(i) == null){
+                pos--;
             }
         }
 

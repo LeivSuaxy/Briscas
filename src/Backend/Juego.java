@@ -4,6 +4,7 @@ import Backend.Cartas.*;
 import Backend.Jugadores.JugadorH;
 import Backend.Jugadores.JugadorIA;
 
+import javax.swing.*;
 import java.io.Serializable;
 import java.util.Random;
 
@@ -45,19 +46,12 @@ public class Juego implements Serializable {
         //Verificar Carta Ganadora
         paloGanador = barajaJuego.getCartaArray(0);
 
-        System.out.println("El palo ganador es: "+barajaJuego.getCartaArray(0).getIdfCarta());
-
-        System.out.println("Cartas humano"+jugador.checkCartas());
-        System.out.println("Cartas NPC"+jugadorIA.checkCartas());
-
         //Turno
         if(Math.random() < 0.5) {
             turno = 1;
-            System.out.println(turno);
         }
         else {
             turno = 2;
-            System.out.println(turno);
             jugarIA();
         }
     }
@@ -135,15 +129,9 @@ public class Juego implements Serializable {
      * Metodo automatico para que juegue la IA (En construccion)
      */
     public void jugarIA(){
-        Random rand = new Random();
         int posicion;
-        do {
-            posicion = rand.nextInt(3);
-            //posicion = jugadorIA.posJugar(cartaJugador, paloGanador);
-            cartaIA = jugadorIA.getCarta(posicion);
-        } while(jugadorIA.getCarta(posicion)==null);
-
-        System.out.println("Verificacion de carta lanzada: " + cartaIA.getTipo() + " " + cartaIA.getIdfCarta());
+        posicion = jugadorIA.posJugar(cartaJugador, paloGanador.getTipo(), cantJugadas);
+        cartaIA = jugadorIA.getCarta(posicion);
         jugadorIA.setCartasPoseidas(posicion, null);
     }
 
@@ -205,13 +193,11 @@ public class Juego implements Serializable {
             this.turno = 2;
             jugadorIA.setTurnoGanado(true);
             jugador.setTurnoGanado(false);
-            System.out.println("Ganador IA");
         } else { //Caso en que gana el jugador
             jugador.agnadirCartasGanadoras(cartas);
             this.turno = 1;
             jugadorIA.setTurnoGanado(false);
             jugador.setTurnoGanado(true);
-            System.out.println("Ganador Jugador");
         }
 
         //Metodo para sumar puntos
@@ -242,16 +228,11 @@ public class Juego implements Serializable {
      * Metodo para repartir las cartas mientras se esta jugando, analiza si falta alguna carta en la mano y la juega
      */
     public void repartirCartasInGame(){
-        System.out.println("Repartiendo Test");
         if(barajaJuego.getPosCartaASacar() != 0) {
             jugador.agnadirCartaInGame(barajaJuego.sacarCarta());
             jugadorIA.agnadirCartaInGame(barajaJuego.sacarCarta());
         } else {
-            System.out.println("Baraja Vacia");
         }
-
-        System.out.println(barajaJuego.getPosCartaASacar()+1);
-        System.out.println("Termina de repartir");
     }
 
     /**
@@ -270,35 +251,51 @@ public class Juego implements Serializable {
     }
 
     public void intercambiarCartas(int pos){
-        Carta aux = null;
-
         if(jugador.getCarta(pos).getIdfCarta() == 2 && jugador.isTurnoGanado()){
-            System.out.println("La carta es 2");
-            System.out.println("Cambiando");
-            aux = paloGanador;
-            paloGanador = jugador.getCarta(pos);
-            jugador.setCartasPoseidas(pos, aux);
-            System.out.println("Ahora el palo ganador es :"+paloGanador.getTipo());
+            switch (paloGanador.getIdfCarta()) {
+                case 7:
+                case 6:
+                case 5:
+                case 4:
+                    intercambiarCartaAccion(pos);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Imposible Cambiar Carta");
+                    break;
+            }
         } else if(jugador.getCarta(pos).getIdfCarta() == 7 && jugador.isTurnoGanado()){
-            System.out.println("La carta es 7");
-            System.out.println("Cambiando");
-            aux = paloGanador;
-            paloGanador = jugador.getCarta(pos);
-            jugador.setCartasPoseidas(pos, aux);
-            System.out.println("Ahora el palo ganador es :"+paloGanador.getTipo());
+            switch (paloGanador.getIdfCarta()) {
+                case 1:
+                case 3:
+                case 12:
+                case 10:
+                case 11:
+                    intercambiarCartaAccion(pos);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Imposible Cambiar Carta");
+                    break;
+            }
         } else {
-            System.out.println("No es cambiable");
+            JOptionPane.showMessageDialog(null, "No es cambiable la carta");
         }
     }
 
     /**
-     * Metodo para obtener la cantidad de Cartas que quedan en la baraja
-     * @return cantidad de cartas restantes en la baraja : int
+     * Metodo interno de la clase juego para intercambiar cartas
      */
-    public int getcantCartasBaraja(){
-        return barajaJuego.getPosCartaASacar();
+    private void intercambiarCartaAccion(int pos){
+        Carta aux;
+
+        aux = paloGanador;
+        paloGanador = jugador.getCarta(pos);
+        jugador.setCartasPoseidas(pos, aux);
     }
 
+    /**
+     * Metodo para saber quien fue el ganador
+     * @return frase que te permitira saber quien gano
+     */
     public String getGanador(){
         String frase = "NobodyKnows";
 

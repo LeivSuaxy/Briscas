@@ -81,11 +81,6 @@ public class Baraja implements Serializable {
 
         barajaOpcional.addAll(Arrays.asList(baraja));
 
-        for (Carta e:barajaOpcional) {
-            System.out.println(e.getClass());
-            System.out.println(e.getIdfCarta());
-        }
-
         posCartaASacar = barajaOpcional.size()-1;
     }
 
@@ -140,7 +135,7 @@ public class Baraja implements Serializable {
                 barajaOpcional.set(posCartaASacar, null);
                 posCartaASacar--;
             } catch (NullPointerException e){
-                System.out.println("Baraja Vacia");
+                e.printStackTrace();
             }
         }
 

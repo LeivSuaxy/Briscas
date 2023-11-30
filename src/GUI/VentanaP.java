@@ -235,26 +235,22 @@ public class VentanaP extends JFrame{
                             juego.checkGanador();
                             juego.repartirCartasInGame();
                             if (juego.checkTurnoPlay() && juego.getCantJugadas() != 1) {
-                                // System.out.println("Turno IA Test");
                                 jugarIA();
                                 panelReciv2.setCarta(juego.getCartaIAPuesta());
                                 panelReciv1.setFondoVerde();
-                                // System.out.println("Final Turno IA Test");
                             }
-                            //System.out.println("Iniciando for de actualizar Imagenes");
                             for (int i = 0; i < 3; i++) {
                                 if (juego.getJugadorIA().getCarta(i) == null)
                                     cartaIA[i].setCarta(juego.getJugadorIA().getCarta(i));
                                 else
                                     cartaIA[i].setImagen(imagenFondo);
-                                // System.out.println("Iteracion: "+i);
                             }
-                            //System.out.println("Error encontrado finish");
+
                             panel.setCarta(juego.getJugadorNormal().getCarta(panel.getPosMano()));
                             puntuacionIA.setText("Puntos: " + juego.getJugadorIA().getPuntuacion());
                             puntuacionJugador.setText("Puntos: " + juego.getJugadorNormal().getPuntuacion());
                             juego.jugadaEjecutada();
-                            System.out.println("CantJugadas: " + juego.getCantJugadas());
+
                             if (juego.getCantJugadas() == 0) {
                                 JOptionPane.showMessageDialog(null, juego.getGanador());
                                 int opcion = JOptionPane.showConfirmDialog(null, "El juego ha acabado desea volver a jugar");
@@ -264,25 +260,15 @@ public class VentanaP extends JFrame{
                                     dispose();
                                 }
                             }
-                            System.out.println("Depuracion");
                         }
-                    } else {
-                        System.out.println("No existe carta en la mano");
                     }
                 } else { // Construccion del Click Derecho
-                    System.out.println("Click Derecho");
                     if(juego.getJugadorNormal().getCarta(panel.getPosMano()) != null){
                         juego.intercambiarCartas(panel.getPosMano());
                         panel.setCarta(juego.getJugadorNormal().getCarta(panel.getPosMano()));
                         panelCartaGanadora.setCarta(juego.getPaloGanador());
                     }
                 }
-
-                //actualizarPaneles();
-                //CheckGame
-                /*if(juego.endGame()){
-                    System.out.println("EndGame");
-                }*/
             }
 
             @Override
@@ -400,6 +386,7 @@ public class VentanaP extends JFrame{
         try {
             fileStream = new FileOutputStream("archivo.txt");
         } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "Error guardadndo datos!");
             throw new RuntimeException(e);
         }
 

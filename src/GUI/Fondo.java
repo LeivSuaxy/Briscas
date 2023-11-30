@@ -110,12 +110,4 @@ public class Fondo extends JPanel {
             repaint();
         }
     }
-
-    /**
-     * Metodo para obtener la carta almacenada en el panel
-     * @return Carta para su uso : Carta
-     */
-    public Carta getCartaAlmacenada(){
-        return cartaAlmacenada;
-    }
 }

@@ -75,12 +75,8 @@ public class JugadorIA extends Jugador{
             }
         }
 
-        System.out.println("Puntuaciones: "+puntuaciones[0]+" "+puntuaciones[1]+" "+puntuaciones[2]);
-        System.out.println("Validez: "+posibilidades[0]+" "+posibilidades[1]+" "+posibilidades[2]);
-
         int posRetorno = 0;
         int puntuacionCheck = 0;
-        //boolean sePuedes = false;
         Random rand = new Random();
 
         //CheckEverything
@@ -88,21 +84,19 @@ public class JugadorIA extends Jugador{
             puntuacionCheck+=puntuaciones[i];
         }
 
-
         if(puntuacionCheck == 0){
             do {
                 posRetorno = rand.nextInt(3);
             } while(cartasPoseidas.get(posRetorno) == null);
         } else {
-            puntuacionCheck = 0;
+            puntuacionCheck = 100;
             for (int i = 0; i < 3; i++) {
-                if(puntuaciones[i] > puntuacionCheck){
+                if(puntuaciones[i] < puntuacionCheck && cartasPoseidas.get(i) != null){
                     posRetorno = i;
                 }
             }
         }
 
-        System.out.println("Retorno: "+(posRetorno+1));
         return posRetorno;
     }
 }
