@@ -16,8 +16,7 @@ public class Test {
         boolean cargar = false;
         String nombre;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        File Archivo = new File("archivo.txt");
-        FileInputStream ArchivoGuardado = null;
+        File Archivo = new File("guardado.dat");
         ObjectInputStream object;
         Juego juegoCarga;
 
@@ -38,23 +37,17 @@ public class Test {
                 cargar = true;
         }
 
-
         if(cargar){
-        try {
-            ArchivoGuardado = new FileInputStream(Archivo);
+        try{
+            object = new ObjectInputStream(new FileInputStream(Archivo));
+            juegoCarga = (Juego) object.readObject();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
-        }
-        try {
-            object = new ObjectInputStream(ArchivoGuardado);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
-            try {
-                juegoCarga = (Juego) object.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
 
             java.awt.EventQueue.invokeLater(() -> new VentanaP((int) screenSize.getWidth(), (int) screenSize.getHeight(), juegoCarga));
         } else {

@@ -60,18 +60,10 @@ public class Juego implements Serializable {
 
     /**
      * Getter de paloganador
-     * @return paloganador : String
+     * @return paloganador : Carta
      */
     public Carta getPaloGanador(){
         return paloGanador;
-    }
-
-    /**
-     * Metodo getter que obtiene de la baraja el paloGanador para el juego
-     * @return paloganador en baraja : Carta
-     */
-    public Carta getPaloGanadorObjeto(){
-        return barajaJuego.getCarta(0);
     }
 
     /**
@@ -130,7 +122,7 @@ public class Juego implements Serializable {
      */
     public void jugarIA(){
         int posicion;
-        posicion = jugadorIA.posJugar(cartaJugador, paloGanador.getTipo(), cantJugadas);
+        posicion = jugadorIA.posJugar(cartaJugador, paloGanador.getTipo());
         cartaIA = jugadorIA.getCarta(posicion);
         jugadorIA.setCartasPoseidas(posicion, null);
     }

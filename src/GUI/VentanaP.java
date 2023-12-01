@@ -13,6 +13,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * Interfaz Grafica principal para el funcionamiento visual del juego Briscas al Reves, con todas sus objetos, metodos y
@@ -30,7 +32,7 @@ public class VentanaP extends JFrame{
     private JMenuItem ayuda;
     private JMenuItem menuItem;
     private Juego juego;
-    private JPanel p;
+    private JPanel panelPrincipal;
     private FondoCartaJugador panelCarta;
     private FondoCartaJugador panelCarta1;
     private FondoCartaJugador panelCarta2;
@@ -83,7 +85,7 @@ public class VentanaP extends JFrame{
     /**
      * Metodo de inicio de componentes de la ventana
      */
-    public void initComponents(){
+    private void initComponents(){
         initMenu();
         initJuego();
         initPanel();
@@ -94,7 +96,7 @@ public class VentanaP extends JFrame{
      * Metodo por sobrecarga en caso que haya una partida existende
      * @param juego se le pasa el juego ya iniciado por parametro
      */
-    public void initComponents(Juego juego){
+    private void initComponents(Juego juego){
         initMenu();
         this.juego = juego;
         initPanel();
@@ -111,64 +113,64 @@ public class VentanaP extends JFrame{
     /**
      * Inicio del juego (Proxima implementacion se le pasa por parametro un String)
      */
-    public void initJuego(){
+    private void initJuego(){
         juego = new Juego(nombreJugador);
     }
 
     /**
      * Iniciando labels
      */
-    public void initLabels(){
+    private void initLabels(){
         puntuacionIA = new JLabel("Puntos: "+juego.getJugadorIA().getPuntuacion());
         puntuacionIA.setForeground(Color.RED);
         puntuacionIA.setFont(new Font("arial", Font.BOLD, 40));
         puntuacionIA.setBounds(1300, 20, 300, 50);
-        p.add(puntuacionIA);
+        panelPrincipal.add(puntuacionIA);
 
         puntuacionJugador = new JLabel("Puntos: "+juego.getJugadorNormal().getPuntuacion());
         puntuacionJugador.setForeground(Color.BLUE);
         puntuacionJugador.setFont(new Font("arial", Font.BOLD, 40));
         puntuacionJugador.setBounds(1300, 750, 300, 50);
-        p.add(puntuacionJugador);
+        panelPrincipal.add(puntuacionJugador);
     }
 
     /**
      * Iniciando paneles
      */
-    public void initPanel(){
+    private void initPanel(){
         cartaIA = new Fondo[3];
-        p = new JPanel();
-        p.setLayout(null);
-        p.setBounds(0,0,this.getWidth(), this.getHeight());
-        p.setBackground(new Color(1, 86, 0));
+        panelPrincipal = new JPanel();
+        panelPrincipal.setLayout(null);
+        panelPrincipal.setBounds(0,0,this.getWidth(), this.getHeight());
+        panelPrincipal.setBackground(new Color(1, 86, 0));
 
-        this.getContentPane().add(p);
+        this.getContentPane().add(panelPrincipal);
 
         panelCarta = new FondoCartaJugador(juego.getJugadorNormal().getCarta(0), 150, 235, 0);
         panelCarta.setLocation(750, 750);
-        p.add(panelCarta);
+        panelPrincipal.add(panelCarta);
 
         panelCarta.addMouseListener(cambioCartas(panelCarta));
 
         panelCarta1 = new FondoCartaJugador(juego.getJugadorNormal().getCarta(1), 150, 235, 1);
         panelCarta1.setLocation(930, 750);
-        p.add(panelCarta1);
+        panelPrincipal.add(panelCarta1);
 
         panelCarta1.addMouseListener(cambioCartas(panelCarta1));
 
         panelCarta2 = new FondoCartaJugador(juego.getJugadorNormal().getCarta(2), 150, 235, 2);
         panelCarta2.setLocation(1110, 750);
-        p.add(panelCarta2);
+        panelPrincipal.add(panelCarta2);
 
         panelCarta2.addMouseListener(cambioCartas(panelCarta2));
 
-        panelCartaGanadora = new Fondo(juego.getPaloGanadorObjeto(), 150, 235);
+        panelCartaGanadora = new Fondo(juego.getPaloGanador(), 150, 235);
         panelCartaGanadora.setLocation(575, 253);
-        p.add(panelCartaGanadora);
+        panelPrincipal.add(panelCartaGanadora);
 
         baraja = new Fondo(imagenFondo, 155, 240);
         baraja.setLocation(575, 527);
-        p.add(baraja);
+        panelPrincipal.add(baraja);
 
         if(juego.getJugadorIA().getCarta(0) != null)
             cartaIA[0] = new Fondo(imagenFondo, 155, 240);
@@ -186,17 +188,17 @@ public class VentanaP extends JFrame{
             cartaIA[2] = new Fondo((Carta) null, 155, 240);
 
         cartaIA[0].setLocation(750, 20);
-        p.add(cartaIA[0]);
+        panelPrincipal.add(cartaIA[0]);
 
         cartaIA[1].setLocation(930, 20);
-        p.add(cartaIA[1]);
+        panelPrincipal.add(cartaIA[1]);
 
         cartaIA[2].setLocation(1110, 20);
-        p.add(cartaIA[2]);
+        panelPrincipal.add(cartaIA[2]);
 
         panelReciv1 = new Fondo((Carta) null, 155, 240);
         panelReciv1.setLocation(840, 385);
-        p.add(panelReciv1);
+        panelPrincipal.add(panelReciv1);
 
         if(juego.getTurno() == 1) {
             panelReciv2 = new Fondo((Carta) null, 155, 240);
@@ -206,7 +208,7 @@ public class VentanaP extends JFrame{
 
         panelReciv2.setLocation(1020, 385);
         panelReciv2.setBackground(new Color(1, 86, 0));
-        p.add(panelReciv2);
+        panelPrincipal.add(panelReciv2);
     }
 
     /**
@@ -297,7 +299,7 @@ public class VentanaP extends JFrame{
     }
 
     /**
-     * Futuro menu (Building)
+     * Menu de opciones
      */
     private void initMenu(){
         menuBar = new JMenuBar();
@@ -309,7 +311,8 @@ public class VentanaP extends JFrame{
         ayuda.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                VentanaAyuda ayudaInterface = new VentanaAyuda();
+                FrameGuia ayudaInterface = new FrameGuia();
+                ayudaInterface.setVisible(true);
             }
         });
 
@@ -364,6 +367,9 @@ public class VentanaP extends JFrame{
         panelReciv2.setCarta(juego.getCartaIAPuesta());
     }
 
+    /**
+     * Metodo para reiniciar el juego
+     */
     private void resetearJuego(){
         initJuego();
         panelCarta.setCarta(juego.getJugadorNormal().getCarta(0));
@@ -379,30 +385,15 @@ public class VentanaP extends JFrame{
         puntuacionIA.setText("Puntos: "+juego.getJugadorIA().getPuntuacion());
     }
 
+    /**
+     * Metodo para guardarPartida
+     */
     private void guardarPartida(){
-        FileOutputStream fileStream;
         ObjectOutputStream objStream;
 
         try {
-            fileStream = new FileOutputStream("archivo.txt");
-        } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "Error guardadndo datos!");
-            throw new RuntimeException(e);
-        }
-
-        try {
-            objStream = new ObjectOutputStream(fileStream);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
+            objStream = new ObjectOutputStream(Files.newOutputStream(Paths.get("guardado.dat")));
             objStream.writeObject(juego);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
             objStream.close();
         } catch (IOException e) {
             throw new RuntimeException(e);

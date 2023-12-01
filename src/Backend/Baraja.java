@@ -22,15 +22,6 @@ public class Baraja implements Serializable {
 
     //Constructor
     public Baraja() {
-        /* Creando baraja
-          1 = 11
-          3 = 10
-          12 = 4
-          11 = 3
-          10 = 2
-          Resto = 0
-          */
-
         //Creando Copas
         baraja[0] = new Copa(11, 1, new ImageIcon(getClass().getResource("/Imagenes/Copa/1 Copa.png")));
         baraja[1] = new Copa(0, 2, new ImageIcon(getClass().getResource("/Imagenes/Copa/2 Copa.png")));

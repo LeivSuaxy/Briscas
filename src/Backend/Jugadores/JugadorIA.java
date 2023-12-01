@@ -28,11 +28,10 @@ public class JugadorIA extends Jugador{
      *     Grado 2: Carta 2 no es palo ganador, hay que buscar carta mas inutil
      * @param cartaAnalisis Carta lanzada por el jugador contrario para su posterior analisis
      * @param paloGanador Carta de paloganador para analizar carta victoriosa
-     * @param cantJugadas Cantidad de jugadas para saber si hay que jugar o no
      * @return Retorna una posicion que es la posicion ganadora para que con otro metodo lanzar esa carta a partir de la
      * posicion
      */
-    public int posJugar(Carta cartaAnalisis, String paloGanador, int cantJugadas){
+    public int posJugar(Carta cartaAnalisis, String paloGanador){
         int[] puntuaciones = {0, 0, 0};
         boolean[] posibilidades = {false, false, false};
 

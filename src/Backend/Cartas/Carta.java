@@ -10,7 +10,6 @@ import java.io.Serializable;
  */
 public abstract class Carta implements Serializable {
     //Atributos
-    protected String tipo;
     protected int valor;
     protected int idfCarta;
     protected ImageIcon frenteCarta;
