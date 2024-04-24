@@ -41,11 +41,7 @@ public class Test {
         try{
             object = new ObjectInputStream(new FileInputStream(Archivo));
             juegoCarga = (Juego) object.readObject();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
